@@ -39,7 +39,7 @@ class UserController {
 
     async edit(req, res){
         let {id, name, role , email} = req.body;
-        let  result = await User.update(id, name, email, role);
+        let  result = await UserModeL.update(id, name, email, role);
         if(result != undefined){
           if(result.status){
             res.status(result.status);
@@ -56,23 +56,24 @@ class UserController {
         }
       }
 
+
       async delete(req, res){
-        let {id} = req.body;
-        let result = await User.delete(id);
-        if(result != undefined){
-          if(result.status){
-            res.status(result.status);
-            res.json(result);
+        const { id } = req.params;
+        try {
+            if(id == undefined){
+                return res.status(400).json({ error: 'Id not found' });
+            }
+            const user = await UserModel.findById(id);
+            if(user.length == 0){
+                return res.status(404).json({ error:'User Cannot be found' });
+            }
+            await UserModel.delete(id);
+            return res.json({ message: 'User deleted' });                                          
           }
-          else{
-            res.status(400);
-            res.json(result);
+          catch (error) {
+            return res.status(500).json({ error: error.message });
           }
-        }
-        else{
-          res.status(500);
-          res.json({error: 'Internal error'});
-        }
+
       }
       
 

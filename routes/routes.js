@@ -10,7 +10,7 @@ router.get('/user/id/:id', UserController.findById);
 router.put('/user/:id', UserController.update);
 router.get('/users', UserController.findAll);
 router.put('/user/edit', UserController.edit);
-router.delete('/user/delete', UserController.delete);
+router.delete('/user/delete/:id', UserController.delete);
 
 
 module.exports = router;
